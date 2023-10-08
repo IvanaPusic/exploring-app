@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+// TODO: Convert longitude and latitude to city
+// TODO: embed Google maps api and autocomplete on search
+
 function App() {
   const [userLocation, setUserLocation] = useState({});
 
@@ -12,6 +15,7 @@ function App() {
   }, []);
 
   console.log(userLocation);
+
   return (
     <>
       <h1>User location</h1>

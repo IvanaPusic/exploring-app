@@ -1,15 +1,28 @@
 import { useLoadScript } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
+import Input from './components/Input';
 import Map from './components/Map';
 
 function App() {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_API_KEY,
   });
-
   const [userLocation, setUserLocation] = useState({});
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [input, setInput] = useState('');
+
+  const handleInput = (e) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (input) {
+      console.log(input);
+      setInput('');
+    }
+  };
 
   const reverseGeocoding = async (lat, lng) => {
     try {
@@ -38,13 +51,22 @@ function App() {
   console.log(userLocation);
 
   if (!isLoaded) {
-    return <h1>Loading....</h1>;
+    return (
+      <section className='flex justify-center align-center'>
+        <h1>Loading...</h1>
+      </section>
+    );
   }
 
   return (
-    <>
+    <section className='flex justify-center '>
+      <Input
+        input={input}
+        handleInput={handleInput}
+        handleSubmit={handleSubmit}
+      />
       <Map lat={latitude} lng={longitude} />
-    </>
+    </section>
   );
 }
 

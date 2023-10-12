@@ -12,16 +12,14 @@ function App() {
   const [longitude, setLongitude] = useState(0);
   const [input, setInput] = useState('');
 
+  // const getDirections = async () => {};
   const handleInput = (e) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input) {
-      console.log(input);
-      setInput('');
-    }
+    console.log(input);
   };
 
   const reverseGeocoding = async (lat, lng) => {
@@ -47,8 +45,6 @@ function App() {
       );
     }
   }, []);
-
-  console.log(userLocation);
 
   if (!isLoaded) {
     return (

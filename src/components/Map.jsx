@@ -5,7 +5,16 @@ const Map = ({ lat, lng }) => {
 
   return (
     <GoogleMap zoom={13} center={center} mapContainerClassName='map'>
-      {/* <Marker position={center} /> */}
+      {/* <DistanceMatrixService
+        options={{
+          travelMode: 'WALKING',
+          origins: [],
+          destinations: [{ lat: 1.296788, lng: 103.778961 }],
+        }}
+        callback={(response) => {
+          console.log(response);
+        }}
+      /> */}
     </GoogleMap>
   );
 };

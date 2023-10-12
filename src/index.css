@@ -131,6 +131,13 @@ body {
   padding-inline: 5rem;
 }
 
+.text-white {
+  color: white;
+}
+
+.form {
+  background-color: white;
+}
 input,
 button {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

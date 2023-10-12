@@ -1,26 +1,28 @@
-import { useLoadScript } from '@react-google-maps/api';
-import { useEffect, useState } from 'react';
+import {
+  DirectionsRenderer,
+  GoogleMap,
+  Marker,
+  useJsApiLoader,
+} from '@react-google-maps/api';
+import { useEffect, useRef, useState } from 'react';
 import Input from './components/Input';
-import Map from './components/Map';
 
 function App() {
-  const { isLoaded } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_API_KEY,
+    libraries: ['places'],
   });
   const [userLocation, setUserLocation] = useState({});
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const [input, setInput] = useState('');
+  const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+  const [directions, setDirections] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
 
-  // const getDirections = async () => {};
-  const handleInput = (e) => {
-    setInput(e.target.value);
-  };
+  const destinationRef = useRef();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(input);
-  };
+  const center = { lat: latitude, lng: longitude };
 
   const reverseGeocoding = async (lat, lng) => {
     try {
@@ -36,6 +38,34 @@ function App() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const calculateRoute = async (e) => {
+    e.preventDefault();
+    if (!destinationRef.current.value) return;
+
+    try {
+      // eslint-disable-next-line no-undef
+      const directionService = new google.maps.DirectionsService();
+      const results = await directionService.route({
+        origin: center,
+        destination: destinationRef.current.value,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.WALKING,
+      });
+      setDirections(results);
+      setDistance(results.routes[0].legs[0].distance.text);
+      setDuration(results.routes[0].legs[0].duration.text);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const clearRoute = () => {
+    setDirections(null);
+    setDistance('');
+    setDuration('');
+    destinationRef.current.value = '';
   };
 
   useEffect(() => {
@@ -57,11 +87,23 @@ function App() {
   return (
     <section className='flex justify-center '>
       <Input
-        input={input}
-        handleInput={handleInput}
-        handleSubmit={handleSubmit}
+        destinationRef={destinationRef}
+        map={map}
+        center={center}
+        calculateRoute={calculateRoute}
+        clearRoute={clearRoute}
+        distance={distance}
+        duration={duration}
       />
-      <Map lat={latitude} lng={longitude} />
+      <GoogleMap
+        center={center}
+        mapContainerClassName='map'
+        zoom={15}
+        onLoad={(map) => setMap(map)}
+      >
+        <Marker position={center} />
+        {directions && <DirectionsRenderer directions={directions} />}
+      </GoogleMap>
     </section>
   );
 }

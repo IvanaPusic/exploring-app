@@ -1,11 +1,17 @@
-import { GoogleMap, Marker } from '@react-google-maps/api';
+import { DirectionsRenderer, GoogleMap, Marker } from '@react-google-maps/api';
 import { useMemo } from 'react';
-const Map = ({ lat, lng }) => {
-  const center = useMemo(() => ({ lat: lat, lng: lng }), [lat, lng]);
+const Map = ({ centerData, setMap, directions }) => {
+  const center = useMemo(() => centerData, [centerData]);
 
   return (
-    <GoogleMap zoom={13} center={center} mapContainerClassName='map'>
+    <GoogleMap
+      center={center}
+      mapContainerClassName='map'
+      zoom={15}
+      onLoad={(map) => setMap(map)}
+    >
       <Marker position={center} />
+      {directions && <DirectionsRenderer directions={directions} />}
     </GoogleMap>
   );
 };

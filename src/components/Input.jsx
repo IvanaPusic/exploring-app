@@ -1,17 +1,13 @@
 import { Autocomplete } from '@react-google-maps/api';
 import searchIcon from '../assets/search-white.svg';
 
-const Input = ({
-  map,
-  center,
-  destinationRef,
-  calculateRoute,
-  distance,
-  duration,
-}) => {
+const Input = ({ destinationRef, calculateRoute, clearRoute }) => {
   return (
     <>
-      <form className='absolute t-1 l-1 z-10 flex  ' onSubmit={calculateRoute}>
+      <form
+        className='absolute t-1 l-1 z-10 flex '
+        onSubmit={(e) => calculateRoute(e)}
+      >
         <div>
           <Autocomplete>
             <input
@@ -25,11 +21,10 @@ const Input = ({
         <button className='py-1 px-1'>
           <img src={searchIcon} alt='search-icon' />
         </button>
-
-        {/* <button className='py-1 px-1 text-white' onClick={clearRoute}>
-        clear
-      </button> */}
       </form>
+      <button className='py-1 px-1 text-white' onClick={() => clearRoute()}>
+        clear
+      </button>
 
       {/* <form onSubmit={calculateRoute}>
         <Autocomplete>

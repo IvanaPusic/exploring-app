@@ -1,12 +1,15 @@
 import { useJsApiLoader } from '@react-google-maps/api';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-export const AppContext = createContext();
+const AppContext = createContext();
+
+export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }) => {
+  console.log('children', children);
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: import.meta.env.VITE_API_KEY,
+    googleMapsApiKey: 'AIzaSyARObBLUsXQ-rKRXDlxKL-bXeKD-6tqCbk',
     libraries: ['places'],
   });
 
@@ -40,32 +43,33 @@ export const AppProvider = ({ children }) => {
 
   const calculateRoute = async (e) => {
     e.preventDefault();
-    setDirections(null);
-    setDistance('');
-    setDuration('');
-    console.log('kjdsssui');
-    // destinationInputRef.current.value = '';
-    console.log(destinationInputRef.current);
-    if (destinationInputRef) {
-      try {
-        // eslint-disable-next-line no-undef
-        const directionService = new google.maps.DirectionsService();
-        const results = await directionService.route({
-          origin: center,
-          destination: destinationInputRef.current.value,
-          // eslint-disable-next-line no-undef
-          travelMode: google.maps.TravelMode.WALKING,
-        });
-        setDirections(results);
+    console.log('calculate');
+    // setDirections(null);
+    // setDistance('');
+    // setDuration('');
+    // console.log('kjdsssui');
+    // // destinationInputRef.current.value = '';
+    // console.log(destinationInputRef.current);
+    // if (destinationInputRef) {
+    //   try {
+    //     // eslint-disable-next-line no-undef
+    //     const directionService = new google.maps.DirectionsService();
+    //     const results = await directionService.route({
+    //       origin: center,
+    //       destination: destinationInputRef.current.value,
+    //       // eslint-disable-next-line no-undef
+    //       travelMode: google.maps.TravelMode.WALKING,
+    //     });
+    //     setDirections(results);
 
-        setDistance(results.routes[0].legs[0].distance.text);
-        setDuration(results.routes[0].legs[0].duration.text);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      setDirections(null);
-    }
+    //     setDistance(results.routes[0].legs[0].distance.text);
+    //     setDuration(results.routes[0].legs[0].duration.text);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // } else {
+    //   setDirections(null);
+    // }
   };
 
   const clearRoute = () => {
@@ -99,11 +103,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider
-      value={{
-        ...state,
-      }}
-    >
+    <AppContext.Provider value={{...state}}>
       {children}
     </AppContext.Provider>
   );

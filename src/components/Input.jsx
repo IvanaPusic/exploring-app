@@ -1,7 +1,20 @@
+/* eslint-disable no-unused-vars */
 import { Autocomplete } from '@react-google-maps/api';
 import searchIcon from '../assets/search-white.svg';
+import { useRef } from 'react';
 
-const Input = ({ destinationRef, calculateRoute, clearRoute }) => {
+const Input = ({calculateRoute, destinationRef}) => {
+  // const {calculateRoute, clearRoute, destinationRef} = useAppContext();
+
+  // const destinationRef = useRef(null);
+  
+  
+  const clearRoute = () => {
+    console.log('clear');
+    destinationRef.current.value = '';
+  }
+
+
   return (
     <>
       <form
